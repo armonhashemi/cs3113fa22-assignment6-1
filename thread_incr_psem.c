@@ -61,9 +61,15 @@ threadFunc(void *arg) {
 
 int main(int argc, char *argv[]) {
 	pthread_t t1, t2;
-	int loops, s;
+	int numThreads, loops, s;
 
 	loops = (argc > 1) ? getNum("getInt", argv[1], GN_GT_0, "num-loops") : 10000000;
+	numThreads = (argc > 2) ? getNum("getInt", argv[2], GN_GT_0, "num-threads") : 2;
+
+
+	fprintf(stderr, "The number of loops is %d and the number of threads is %d\n", loops, numThreads);
+
+	pthread_t threads[numThreads];
 
 	/* Initialize a semaphore with the value 1 */
 
@@ -79,6 +85,14 @@ int main(int argc, char *argv[]) {
 	if (s != 0)
 		perror("pthread_create");
 
+	/* Create numThreads many threads */
+	for (int i = 0; i < numThreads; ++i) {
+		s = pthread_create(&threads[i], NULL, threadFunc, &loops);
+
+		if (s != 0) {
+			perror("pthread_create");
+		}
+	}
 	/* Wait for threads to terminate */
 
 	s = pthread_join(t1, NULL);
@@ -87,6 +101,13 @@ int main(int argc, char *argv[]) {
 	s = pthread_join(t2, NULL);
 	if (s != 0)
 		perror("pthread_join");
+
+	for (int i = 0; i < numThreads; ++i) {
+		s = pthread_join(threads[i], NULL);
+		if (s != 0) {
+			perror("pthread_join");
+		}
+	}
 
 	printf("glob = %d\n", glob);
 	exit(EXIT_SUCCESS);
