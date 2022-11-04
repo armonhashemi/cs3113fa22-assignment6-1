@@ -60,7 +60,6 @@ threadFunc(void *arg) {
 }
 
 int main(int argc, char *argv[]) {
-	pthread_t t1, t2;
 	int numThreads, loops, s;
 
 	loops = (argc > 1) ? getNum("getInt", argv[1], GN_GT_0, "num-loops") : 10000000;
@@ -76,15 +75,6 @@ int main(int argc, char *argv[]) {
 	if (sem_init(&sem, 0, 1) == -1)
 		perror("sem_init");
 
-	/* Create two threads that increment 'glob' */
-
-	s = pthread_create(&t1, NULL, threadFunc, &loops);
-	if (s != 0)
-		perror("pthread_create");
-	s = pthread_create(&t2, NULL, threadFunc, &loops);
-	if (s != 0)
-		perror("pthread_create");
-
 	/* Create numThreads many threads */
 	for (int i = 0; i < numThreads; ++i) {
 		s = pthread_create(&threads[i], NULL, threadFunc, &loops);
@@ -93,15 +83,8 @@ int main(int argc, char *argv[]) {
 			perror("pthread_create");
 		}
 	}
+
 	/* Wait for threads to terminate */
-
-	s = pthread_join(t1, NULL);
-	if (s != 0)
-		perror("pthread_join");
-	s = pthread_join(t2, NULL);
-	if (s != 0)
-		perror("pthread_join");
-
 	for (int i = 0; i < numThreads; ++i) {
 		s = pthread_join(threads[i], NULL);
 		if (s != 0) {
