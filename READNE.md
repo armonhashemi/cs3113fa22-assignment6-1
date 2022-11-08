@@ -21,7 +21,7 @@ Bonus Completed: Yes
 ## Definition of semaphores.
   According to Zybooks, "A semaphore S is an integer variable that, apart from initialization, is accessed only through two standard atomic operations: wait() and signal()."
 
-  In my own words, I would say that sempahores are used when two threads are trying to access the same resource and semaphores ensure that only one thread has access to that shared resource at any given time. 
+  In my own words, I would say that sempahores are used when two threads are trying to access the same resource and semaphores ensure that only one thread has access to that shared resource at any given time by signalling availability of a resource. 
 
 
 ## Definitions of "real time", "kernel time", "user time".
@@ -32,14 +32,13 @@ Bonus Completed: Yes
   User time - is the time that the CPU spent on a process in user mode
 
 ## Include plots from the results.
-![plot 1](plot.png)
+![core4](./experiment2022110819.csv_rt.png)
+![core8](./experiment2022110828.csv_rt.png)
+![core16](./experiment2022110825.csv_rt.png)
 
 
 ## Descriptions of trends of the plots.
-Duis sollicitudin mi in augue tincidunt lacinia. Nam porta euismod viverra. 
-Sed eleifend dolor libero, at porttitor orci porttitor vel. Fusce et feugiat risus, quis finibus felis.
-
+  With 2 threads, the semaphore addition time is near constant with respect to the number of loops. As the number of threads increases, the semaphore addition time raises with a steeper slope with respect to the number of loops. 
 
 ## Explanation of the trend results.
-Etiam aliquet dui molestie, commodo metus sit amet, posuere sem. Vestibulum et mauris nec enim pharetra commodo eu sit amet eros.
-Nam id ornare lorem. Nullam ornare massa dolor, volutpat aliquet lorem ullamcorper vehicula.
+  With the addition of more threads, the semaphore addition time increases becauses more threads are waiting for the signal to access the shared resource.
